@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Formulario académico para el registro y búsqueda de fichas médicas." />
+  <title>Ficha Médica | Actividad Semana 03</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar__content">
+      <div>
+        <p class="eyebrow">Actividad Sumativa · Semana 03</p>
+        <h1>Registro de Ficha Médica</h1>
+        <p class="subtitle">Formulario académico con validación, almacenamiento local y búsqueda por apellido.</p>
+      </div>
+      <div class="badge" aria-label="Estado de la aplicación">Aplicación web</div>
+    </div>
+  </header>
+
+  <main class="container" id="appRoot">
+    <section class="notice" aria-label="Aviso de uso">
+      <strong>Demo académica:</strong> los registros se guardan únicamente en el almacenamiento local de este navegador. No ingreses datos clínicos reales o sensibles.
+    </section>
+
+    <div id="globalMessage" class="global-message" role="status" aria-live="polite"></div>
+
+    <section class="card" aria-labelledby="formTitle">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow eyebrow--dark">Ingreso de registros</p>
+          <h2 id="formTitle">Datos del paciente</h2>
+        </div>
+        <span class="required-note">* Campos obligatorios</span>
+      </div>
+
+      <form id="medicalForm" novalidate>
+        <div class="form-grid">
+          <div class="field">
+            <label for="rut">RUT *</label>
+            <input id="rut" name="rut" type="text" inputmode="text" autocomplete="off" placeholder="12.345.678-5" maxlength="12" required aria-describedby="rutError" />
+            <small id="rutError" class="error" aria-live="polite"></small>
+          </div>
+
+          <div class="field">
+            <label for="nombres">Nombres *</label>
+            <input id="nombres" name="nombres" type="text" autocomplete="given-name" placeholder="Ej. Camila Andrea" maxlength="60" required aria-describedby="nombresError" />
+            <small id="nombresError" class="error" aria-live="polite"></small>
+          </div>
+
+          <div class="field">
+            <label for="apellidos">Apellidos *</label>
+            <input id="apellidos" name="apellidos" type="text" autocomplete="family-name" placeholder="Ej. Soto Pérez" maxlength="80" required aria-describedby="apellidosError" />
+            <small id="apellidosError" class="error" aria-live="polite"></small>
+          </div>
+
+          <div class="field">
+            <label for="direccion">Dirección *</label>
+            <input id="direccion" name="direccion" type="text" autocomplete="street-address" placeholder="Ej. Av. Providencia 1234" maxlength="120" required aria-describedby="direccionError" />
+            <small id="direccionError" class="error" aria-live="polite"></small>
+          </div>
+
+          <div class="field">
+            <label for="ciudad">Ciudad *</label>
+            <input id="ciudad" name="ciudad" type="text" autocomplete="address-level2" placeholder="Ej. Santiago" maxlength="60" required aria-describedby="ciudadError" />
+            <small id="ciudadError" class="error" aria-live="polite"></small>
+          </div>
+
+          <div class="field">
+            <label for="telefono">Teléfono *</label>
+            <input id="telefono" name="telefono" type="tel" autocomplete="tel" placeholder="+56 9 1234 5678" maxlength="18" required aria-describedby="telefonoError" />
+            <small id="telefonoError" class="error" aria-live="polite"></small>
+          </div>
+
+          <div class="field">
+            <label for="email">Email *</label>
+            <input id="email" name="email" type="email" autocomplete="email" placeholder="nombre@correo.cl" maxlength="120" required aria-describedby="emailError" />
+            <small id="emailError" class="error" aria-live="polite"></small>
+          </div>
+
+          <div class="field">
+            <label for="fechaNacimiento">Fecha de nacimiento *</label>
+            <input id="fechaNacimiento" name="fechaNacimiento" type="date" required aria-describedby="fechaNacimientoError" />
+            <small id="fechaNacimientoError" class="error" aria-live="polite"></small>
+          </div>
+
+          <div class="field">
+            <label for="estadoCivil">Estado civil *</label>
+            <select id="estadoCivil" name="estadoCivil" required aria-describedby="estadoCivilError">
+              <option value="">Seleccione una opción</option>
+              <option>Soltero/a</option>
+              <option>Casado/a</option>
+              <option>Divorciado/a</option>
+              <option>Viudo/a</option>
+              <option>Acuerdo de Unión Civil</option>
+            </select>
+            <small id="estadoCivilError" class="error" aria-live="polite"></small>
+          </div>
+
+          <div class="field field--full">
+            <div class="label-row">
+              <label for="comentarios">Comentarios *</label>
+              <span id="commentCounter">0/500</span>
+            </div>
+            <textarea id="comentarios" name="comentarios" rows="4" placeholder="Ingrese observaciones generales para la ficha..." maxlength="500" required aria-describedby="comentariosError"></textarea>
+            <small id="comentariosError" class="error" aria-live="polite"></small>
+          </div>
+        </div>
+
+        <div class="actions" aria-label="Acciones del formulario">
+          <button class="btn btn--primary" id="saveBtn" type="submit">Guardar</button>
+          <button class="btn btn--secondary" id="clearBtn" type="button">Limpiar</button>
+          <button class="btn btn--danger" id="closeBtn" type="button">Cerrar</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card" aria-labelledby="searchTitle">
+      <div class="section-heading section-heading--search">
+        <div>
+          <p class="eyebrow eyebrow--dark">Consulta</p>
+          <h2 id="searchTitle">Buscar por apellido</h2>
+        </div>
+        <span id="recordCount" class="record-count">0 registros</span>
+      </div>
+
+      <div class="search-row">
+        <div class="field search-field">
+          <label for="searchLastName">Apellido</label>
+          <input id="searchLastName" type="search" placeholder="Ej. Soto" maxlength="80" aria-describedby="searchError" />
+          <small id="searchError" class="error" aria-live="polite"></small>
+        </div>
+        <button class="btn btn--primary btn--search" id="searchBtn" type="button">Buscar</button>
+        <button class="btn btn--ghost btn--search" id="showAllBtn" type="button">Mostrar todos</button>
+      </div>
+
+      <div id="searchSummary" class="search-summary" aria-live="polite"></div>
+      <div id="results" class="results" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <section id="closedPanel" class="closed-panel" hidden aria-live="polite">
+    <div class="card closed-card">
+      <p class="eyebrow eyebrow--dark">Aplicación cerrada</p>
+      <h2>La ficha fue cerrada correctamente</h2>
+      <p>El formulario se limpió y la sesión visual quedó cerrada. Los registros guardados permanecen en este navegador.</p>
+      <button id="reopenBtn" class="btn btn--primary" type="button">Reabrir aplicación</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">Actividad académica · Verificación y validación de software</div>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
